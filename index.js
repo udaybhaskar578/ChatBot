@@ -1,4 +1,3 @@
-//Test Parrot Token EAAHFsDy3hhEBADeRZAnuZAZB8xrbUlChZBmalDLsvWDN0faFKCy9jkyMrZCagZBg9eVpCYejAwD20c1TpUyJULzTR3MVEgwTFZBUQeJpsOSwegzFHxWnX4axHps3OfaH0UyD99otNPGaZArlyzZAUkdqq0uCIsJb5GSZCfARDYyNs5oAZDZD
 var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
@@ -19,7 +18,7 @@ app.get('/', function (req, res) {
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === 'TestParrotingSkills') {
+    if (req.query['hub.verify_token'] === 'Aha_Moment_Labs') {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
@@ -55,7 +54,7 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 })
 
-var token = "EAAHFsDy3hhEBAIsp838RxG1wyxJEMhC1jyrVb9ZAakZAXgrO8FlbFfLJRYU2qwG5ZCZBZC3GcNshmKx5sfylLAbMAvxZAdH46BV5ac8Vzfsw27uGcA0DynN9ke0Vw7NJTRwjCtXIhRm5gajBciR80ZA0tXyKCecTGmOeHDgZAKxO0AZDZD"
+var token = "EAAHFsDy3hhEBAJYhQG1rFLFIEmbdR2fLskGxo97HYUyviOYiGEGTIrQqFZAQZAhqWwyefZALKJH2cPrZCIo4zjvhqYj2NsRZAaRYx8uA0pPCV7oWycBYzwZBSaqFs0AUTUfGjmAhX211C8bF0d8EZC20sHbchFKVNb2WZCE7dVZBc8AZDZD"
 
 // function to echo back messages - added by Stefan
 
@@ -160,4 +159,3 @@ function sendGenericMessage(sender) {
         }
     })
 }
-
