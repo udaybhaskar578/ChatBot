@@ -1,3 +1,4 @@
+//Test Parrot Token EAAHFsDy3hhEBADeRZAnuZAZB8xrbUlChZBmalDLsvWDN0faFKCy9jkyMrZCagZBg9eVpCYejAwD20c1TpUyJULzTR3MVEgwTFZBUQeJpsOSwegzFHxWnX4axHps3OfaH0UyD99otNPGaZArlyzZAUkdqq0uCIsJb5GSZCfARDYyNs5oAZDZD
 var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
@@ -18,7 +19,7 @@ app.get('/', function (req, res) {
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === 'Aha_Moment_Labs') {
+    if (req.query['hub.verify_token'] === 'TestParrotingSkills') {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
