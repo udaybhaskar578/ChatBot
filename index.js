@@ -43,7 +43,7 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
-            sendTextMessage(sender, "parrot: " + text.substring(0, 200))
+            sendTextMessage(sender, "MyChatBot: " + text.substring(0, 200))
         }
         if (event.postback) {
             text = JSON.stringify(event.postback)
@@ -54,7 +54,7 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 })
 
-var token = "EAAEa5GHQvm0BAAjm40tacceExPz2AN4yZB7sZBpecyGLZCDOGLBU5RaNO64Dt6rPwzBpukLDGP895PraZCRZAgb8UFWUzir18BI3JayLnZAZCWmHmacgEETj49ZC0DrX0pF2O4uGYQ5Q2WVPEUWgzI4xFKw1cLZAIJ9f61gCqisuE0AZDZD"
+var token = "EAAa3gAjGZCyUBAKqZC8dWddDdV4YGeOSecToXeWXFvfyZCvAuG0RCrhtbSRBoXLbMUUy6POzZAiLnwQr3psq2b6MgOcpYG8VNwqsrtQ2dAFYBtlHHnHE24bKItQjGbwRZCWTXmvJpe8TvRlhOnVsn1fCeT95QZCuWBHiSjWIt9dgZDZD"
 
 // function to echo back messages - added by Stefan
 
@@ -89,13 +89,13 @@ function sendGenericMessage(sender) {
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": "Ai Chat Bot Communities",
-                    "subtitle": "Communities to Follow",
+                    "title": "Meditation",
+                    "subtitle": "Gives happiness",
                     "image_url": "http://1u88jj3r4db2x4txp44yqfj1.wpengine.netdna-cdn.com/wp-content/uploads/2016/04/chatbot-930x659.jpg",
                     "buttons": [{
                         "type": "web_url",
                         "url": "https://www.facebook.com/groups/aichatbots/",
-                        "title": "FB Chatbot Group"
+                        "title": "Programming Material"
                     }, {
                         "type": "web_url",
                         "url": "https://www.reddit.com/r/Chat_Bots/",
