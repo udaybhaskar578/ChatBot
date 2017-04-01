@@ -1,5 +1,6 @@
 var express = require('express')
 var bodyParser = require('body-parser')
+var $ = require('jquery')
 var request = require('request')
 var app = express()
 
@@ -15,6 +16,13 @@ app.use(bodyParser.json())
 app.get('/', function (req, res) {
     res.send('Hello world, I am a chat bot')
 })
+app.get('/helloworld', function (req, res) {
+    $.getJSON('https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q=95112',function(data){
+        alert(data)
+    });
+    res.send('Hello world, I am a chat bot')
+})
+
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
