@@ -14,15 +14,15 @@ app.use(bodyParser.json())
 
 // Index route
 app.get('/', function (req, res) {
-    $.getJSON('https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q=95112',function(data){
-        alert(data)
-    });
+    // $.getJSON('https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q=95112',function(data){
+    //     alert(data)
+    // });
     res.send('Hello world, I am a chat bot')
 })
 app.get('/helloworld/', function (req, res) {
-    $.getJSON('https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q=95112',function(data){
-        alert(data)
-    });
+    // $.getJSON('https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q=95112',function(data){
+    //     alert(data)
+    // });
     res.send('Hello world, I am a chat bot')
 })
 
