@@ -44,11 +44,8 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
-
-        $.getJSON('https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q='+text,function(data) {
-            sendTextMessage(sender, "MyChatBot: " + data)
-        });
             
+            sendTextMessage(sender, "MyChatBot: " + text.substring(0, 200))
         }
         if (event.postback) {
             text = JSON.stringify(event.postback)
