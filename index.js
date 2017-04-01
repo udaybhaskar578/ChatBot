@@ -1,5 +1,6 @@
 var express = require('express')
 var bodyParser = require('body-parser')
+var $ = require('jQuery');
 var request = require('request')
 var app = express()
 
@@ -43,7 +44,11 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
-            sendTextMessage(sender, "MyChatBot: " + text.substring(0, 200))
+
+        $.getJSON('https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q='+text,function(data) {
+            sendTextMessage(sender, "MyChatBot: " + data)
+        });
+            
         }
         if (event.postback) {
             text = JSON.stringify(event.postback)
