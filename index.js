@@ -1,8 +1,13 @@
-var express = require('express')
-var bodyParser = require('body-parser')
-var $ = require('jquery')
-var request = require('request')
-var app = express()
+var express = require('express');
+var bodyParser = require('body-parser');
+var request = require('request');
+var app = express();
+
+
+
+var server = app.listen(3000, function() {
+  console.log('Listening on port %d', server.address().port);
+});
 
 app.set('port', (process.env.PORT || 5000))
 
@@ -14,15 +19,15 @@ app.use(bodyParser.json())
 
 // Index route
 app.get('/', function (req, res) {
-    // $.getJSON('https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q=95112',function(data){
-    //     alert(data)
-    // });
+
+
+        
     res.send('Hello world, I am a chat bot')
 })
+
+
 app.get('/helloworld/', function (req, res) {
-    // $.getJSON('https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q=95112',function(data){
-    //     alert(data)
-    // });
+
     res.send('Hello world, I am a chat bot')
 })
 
@@ -41,20 +46,26 @@ app.listen(app.get('port'), function() {
 })
 
 
-// API End Point - added by Stefan
 
+// WebHook Response
 app.post('/webhook/', function (req, res) {
     messaging_events = req.body.entry[0].messaging
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
+        var responseMessage = ""
         if (event.message && event.message.text) {
             text = event.message.text
             if (text === 'hi') {
                 sendGenericMessage(sender)
                 continue
             }
-            sendTextMessage(sender, "MyChatBot: " + text.substring(0, 200))
+            else if(Number.isInteger(text)&&text.length ==5){
+               responseMessage = getWeather(text)
+            }else{
+                responseMessage = text.substring(0, 200)
+            }
+            sendTextMessage(sender, "MyChatBot: " + responseMessage+ "Hello")
         }
         if (event.postback) {
             text = JSON.stringify(event.postback)
@@ -67,6 +78,20 @@ app.post('/webhook/', function (req, res) {
 
 var token = "EAAa3gAjGZCyUBAB9gk0sZB2Rm6Y6m2qO8c2YI1XsZB1JKEyQxgqZA0f73C3cMZAz1eIgmn0bLqMVoEGVsMATHgLSZCWfuP6CAsZC90u8sMnWeMRA545V7q92brd8dyNa4a4wETczPllmLugfEOpuij5ChgI9bCDnGKVT1iYqOf9TQZDZD"
 
+// Function to compute the weather at given zip code
+function getWeather(zipcode){
+    var url = "https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q="+zipcode;
+    request({
+        url: url,
+        json: true
+        }, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            return "Location: "+body.location.name+"\nTemperature: "+body.current.temp_f // Print the json response
+        }else{
+            return "Error"
+        }
+    })
+}
 // function to echo back messages - added by Stefan
 
 function sendTextMessage(sender, text) {
@@ -170,3 +195,14 @@ function sendGenericMessage(sender) {
         }
     })
 }
+
+
+//   $.ajax({
+//   type: 'GET',
+//   url: 'https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q=95112',
+//   async: false,
+//   dataType: 'json',
+//   success: function (data) {
+//     alert("Bombay");
+//   }
+// });
