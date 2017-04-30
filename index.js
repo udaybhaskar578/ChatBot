@@ -66,7 +66,7 @@ app.post('/webhook/', function (req, res) {
             }
             else if(text.length ==5){
                 getWeather(text,function(result){
-                    sendTextMessage(sender, "Weather: " + result)
+                    sendTextMessage(sender, "Weather: \n" + result)
                })
             }else{
                 sendTextMessage(sender, "MyChatBot: " + text.substring(0, 200))
@@ -110,7 +110,7 @@ function getWeather(zipcode,callback){
         }, function (error, response, body) {
         if (!error && response.statusCode === 200) {
             // console.log("Location: "+body.location.name+"\nTemperature: "+body.current.temp_f)
-            callback("Location: "+body.location.name );// Print the json response) 
+            callback("Location: "+body.location.name+"\nTemperature: "+body.current.temp_f);// Print the json response) 
         }else{
             callback("error")
         }
