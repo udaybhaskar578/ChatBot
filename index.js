@@ -21,6 +21,7 @@ app.use(bodyParser.json())
 app.get('/', function (req, res) {
 
     getWeather("95112",function(result){
+        console.log(result+"Bombay")
         res.send(result)
     })
     
@@ -65,12 +66,13 @@ app.post('/webhook/', function (req, res) {
             }
             else if(text.length ==5){
                 getWeather(text,function(result){
-                    responseMessage = result;
+                    sendTextMessage(sender, "Weather: " + result)
                })
             }else{
-                responseMessage = text.substring(0, 200)
+                sendTextMessage(sender, "MyChatBot: " + text.substring(0, 200))
+                
             }
-            sendTextMessage(sender, "MyChatBot: " + responseMessage)
+            
         }
         if (event.postback) {
             text = JSON.stringify(event.postback)
@@ -101,14 +103,14 @@ var token = "EAAa3gAjGZCyUBAB9gk0sZB2Rm6Y6m2qO8c2YI1XsZB1JKEyQxgqZA0f73C3cMZAz1e
 // Function to compute the weather at given zip code
 function getWeather(zipcode,callback){
     var url = "https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q="+zipcode;
-    console.log(url)
+    // console.log(url)
     request({
         url: url,
         json: true
         }, function (error, response, body) {
         if (!error && response.statusCode === 200) {
-            console.log("Location: "+body.location.name+"\nTemperature: "+body.current.temp_f)
-            callback("Location: "+body.location.name+"\nTemperature: "+body.current.temp_f );// Print the json response) 
+            // console.log("Location: "+body.location.name+"\nTemperature: "+body.current.temp_f)
+            callback("Location: "+body.location.name );// Print the json response) 
         }else{
             callback("error")
         }
