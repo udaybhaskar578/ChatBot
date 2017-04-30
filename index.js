@@ -60,7 +60,7 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
-            else if(Number.isInteger(text)&&text.length ==5){
+            else if(text.length ==5){
                responseMessage = getWeather(text)
             }else{
                 responseMessage = text.substring(0, 200)
