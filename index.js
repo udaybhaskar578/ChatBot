@@ -54,7 +54,6 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
-            
             sendTextMessage(sender, "MyChatBot: " + text.substring(0, 200))
         }
         if (event.postback) {
