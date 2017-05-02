@@ -58,19 +58,25 @@ app.post('/webhook/', function (req, res) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
         var responseMessage = ""
+        
         if (event.message && event.message.text) {
             text = event.message.text
             if (text === 'hi') {
-                sendGenericMessage(sender)
+                //sendGenericMessage(sender)
+                sendTextMessage(sender,String(sender))
                 continue
+            }
+            else if(text.includes("hi")){
+                sendTextMessage(sender,"")
             }
             else if(text.length ==5){
                 getWeather(text,function(result){
                     sendTextMessage(sender, "Weather: \n" + result)
                })
+               continue
             }else{
-                sendTextMessage(sender, "MyChatBot: " + text.substring(0, 200))
-                
+                sendTextMessage(sender, "Parroting the text entered: " + text.substring(0, 200))
+                continue
             }
             
         }
@@ -116,7 +122,7 @@ function getWeather(zipcode,callback){
         }
     })
 }
-// function to echo back messages - added by Stefan
+
 
 function sendTextMessage(sender, text) {
     messageData = {
@@ -151,7 +157,7 @@ function sendGenericMessage(sender) {
                 "elements": [{
                     "title": "Meditation",
                     "subtitle": "Gives happiness",
-                    "image_url": "http://1u88jj3r4db2x4txp44yqfj1.wpengine.netdna-cdn.com/wp-content/uploads/2016/04/chatbot-930x659.jpg",
+                    "image_url": "http://www.oplexcareers.com/wp-content/uploads/2016/06/Meditation.jpg",
                     "buttons": [{
                         "type": "web_url",
                         "url": "https://www.facebook.com/groups/aichatbots/",
@@ -167,7 +173,7 @@ function sendGenericMessage(sender) {
                     }],
                 }, {
                     "title": "Chatbots FAQ",
-                    "subtitle": "Aking the Deep Questions",
+                    "subtitle": "Asking the Deep Questions",
                     "image_url": "https://tctechcrunch2011.files.wordpress.com/2016/04/facebook-chatbots.png?w=738",
                     "buttons": [{
                         "type": "postback",
