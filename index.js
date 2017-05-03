@@ -1,7 +1,22 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
+var Yelp = require('yelp');
 var app = express();
+
+//Yelp Initialization 
+var yelp = new Yelp({
+  consumer_key: 'M33oLit1ilchda_3Eat1dw',
+  consumer_secret: 'iUt0IU_O8XnyuI_wz4WaKCsgezw',
+  token: '_j9XrUyNOs7TsY6q7Ry2A5p1Dc5fYhEV',
+  token_secret: 'CusdwqDsHGrMJtLmtDxmm84c14g',
+});
+
+
+
+
+
+
 
 // Facebook Page Token
 var token = "EAAa3gAjGZCyUBAB9gk0sZB2Rm6Y6m2qO8c2YI1XsZB1JKEyQxgqZA0f73C3cMZAz1eIgmn0bLqMVoEGVsMATHgLSZCWfuP6CAsZC90u8sMnWeMRA545V7q92brd8dyNa4a4wETczPllmLugfEOpuij5ChgI9bCDnGKVT1iYqOf9TQZDZD"
@@ -20,6 +35,31 @@ app.use(bodyParser.json())
 
 // Index route
 app.get('/', function (req, res) {
+
+
+// See http://www.yelp.com/developers/documentation/v2/search_api
+yelp.search({ term: 'Indian Restaurants', location: '95112' })
+.then(function (data) {
+  console.log(data);
+})
+.catch(function (err) {
+  console.error(err);
+});
+
+// See http://www.yelp.com/developers/documentation/v2/business
+// yelp.business('yelp-san-francisco')
+//   .then(console.log)
+//   .catch(console.error);
+
+// yelp.phoneSearch({ phone: '+15555555555' })
+//   .then(console.log)
+//   .catch(console.error);
+
+// // A callback based API is also available:
+// yelp.business('yelp-san-francisco', function(err, data) {
+//   if (err) return console.log(error);
+//   console.log(data);
+// });
 
  res.send('Hello world, I am a chat bot')
 })
@@ -119,6 +159,7 @@ function sendTextMessage(sender, text) {
     }
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
+        sender_action:"typing_on",
         qs: {access_token:token},
         method: 'POST',
         json: {
