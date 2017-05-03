@@ -21,15 +21,7 @@ app.use(bodyParser.json())
 // Index route
 app.get('/', function (req, res) {
 
-    getWeather("95112",function(result){
-        console.log(result)
-        
-    })
-    getUserName(function(result){
-        console.log(result)
-        res.send(result)
-        
-    })  
+ res.send('Hello world, I am a chat bot')
 })
 
 
@@ -106,13 +98,13 @@ function getWeather(zipcode,callback){
 }
 
 function getUserName(eventSenderId,callback){
-    var url = 'https://graph.facebook.com/v2.6/'+eventSenderId+'?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token='+token
+    var url = 'https://graph.facebook.com/v2.6/'+eventSenderId+'?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token='+token;
     request({
         url: url,
         json: true
         }, function (error, response, body) {
         if (!error && response.statusCode === 200) {
-            callback(body.first_name+" "+body.last_name);
+            callback(body.first_name+" "+body.last_name)
         }else{
             callback("error")
         }
