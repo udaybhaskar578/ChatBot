@@ -26,6 +26,8 @@ EOpuij5ChgI9bCDnGKVT1iYqOf9TQZDZD`
 app.set('port', (process.env.PORT || 3000))
 app.listen(app.get('port'), function() {
    console.log('Listening on port %d', app.get('port'))
+   console.log(isNaN('95112'))
+
 })
 
 // Process application/x-www-form-urlencoded
@@ -80,10 +82,8 @@ app.post('/webhook/', function (req, res) {
             if (text === 'hi' || text === 'hello') {
                 getUserName(sender,function(result){
                     sendTextMessage(sender, "Hi, "+ result)
-                }).then(function(){
                     sendTextMessage(sender,introductionText) 
                 })
-                
                 continue
             }
             else if(text.length ==5 && !isNaN(text)){
