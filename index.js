@@ -48,7 +48,7 @@ yelp.search({ term: 'Indian Restaurants', location: 'San Francisco' ,sort:'2', l
     // // var value = obj[key]; // here get value "by name" as it expected with objects
     // console.log(key);
     // }
-    console.log(businesses[0].rating);
+    console.log(businesses[0]);
 })
 .catch(function (err) {
   console.error(err);
@@ -243,3 +243,20 @@ function sendGenericMessage(sender) {
     })
 }
 
+
+
+//Message Generic Template
+// {
+//                     "title": "Meditation",
+//                     "subtitle": "Gives happiness",
+//                     "image_url": "http://www.oplexcareers.com/wp-content/uploads/2016/06/Meditation.jpg",
+//                     "buttons": [{
+//                         "type": "web_url",
+//                         "url": "https://www.yelp.com/biz/avatars-restaurant-sausalito?adjust_creative=M33oLit1ilchda_3Eat1dw&utm_campaign=yelp_api&utm_medium=api_v2_search&utm_source=M33oLit1ilchda_3Eat1dw",
+//                         "title": "View this on yelp"
+//                     }, {
+//                         "type": "phone_number",
+//                         ""payload":"+15105551234"",
+//                         "title": "Call Restaurant"
+//                     }],
+//                 }
