@@ -63,7 +63,7 @@ app.post('/webhook/', function (req, res) {
             if (text === 'hi' || text === 'hello') {
                 //sendGenericMessage(sender)
                 getUserName(sender,function(result){
-                    sendTextMessage(sender,)
+                    sendTextMessage(sender, "Hi, "+ result)
                 })
                 
                 continue
