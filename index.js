@@ -14,17 +14,13 @@ var yelp = new Yelp({
 
 var introductionText = `I am chat bot in development phase, \n I can help you 
 out in the following ways\n1.Send me your zipcode, I'll tell weather at
- your place\n2.Know restaurants nearby`
-
-
-
-
-
-
-
+ your place\n2.Know restaurants nearby, just say #######(Kind of Restaurants 
+ / Malls) in #####(zip/place)`
 
 // Facebook Page Token
-var token = "EAAa3gAjGZCyUBAB9gk0sZB2Rm6Y6m2qO8c2YI1XsZB1JKEyQxgqZA0f73C3cMZAz1eIgmn0bLqMVoEGVsMATHgLSZCWfuP6CAsZC90u8sMnWeMRA545V7q92brd8dyNa4a4wETczPllmLugfEOpuij5ChgI9bCDnGKVT1iYqOf9TQZDZD"
+var token = `EAAa3gAjGZCyUBAB9gk0sZB2Rm6Y6m2qO8c2YI1XsZB1JKEyQxgqZA0f73C3cMZAz1
+eIgmn0bLqMVoEGVsMATHgLSZCWfuP6CAsZC90u8sMnWeMRA545V7q92brd8dyNa4a4wETczPllmLugf
+EOpuij5ChgI9bCDnGKVT1iYqOf9TQZDZD`
 
 // Code to set the port number and listen to the port number
 app.set('port', (process.env.PORT || 3000))
@@ -41,28 +37,19 @@ app.use(bodyParser.json())
 // Index route
 app.get('/', function (req, res) {
 
-    var urls='https://graph.facebook.com/v2.6/1362584033807727?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=EAAa3gAjGZCyUBAB9gk0sZB2Rm6Y6m2qO8c2YI1XsZB1JKEyQxgqZA0f73C3cMZAz1eIgmn0bLqMVoEGVsMATHgLSZCWfuP6CAsZC90u8sMnWeMRA545V7q92brd8dyNa4a4wETczPllmLugfEOpuij5ChgI9bCDnGKVT1iYqOf9TQZDZD'
-    // var url = 'https://graph.facebook.com/v2.6/'+eventSenderId+'?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token='+token;
-    request({
-        url: urls,
-        json: true
-        }, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            console.log(body[0]+" "+body.last_name)
-        }else{
-            console.log("error")
-        }
-    })
-// See http://www.yelp.com/developers/documentation/v2/search_api
-yelp.search({ term: 'Shopping Malls', location: '95112' ,sort:'2', limit:'2'})
+yelp.search({ term: 'Temple', location: 'sanjose' ,sort:'2', limit:'2'})
 .then(function (data) {
-
-  console.log(data);
+    var keysArray = Object.keys(data);
+    for (var i = 0; i < keysArray.length; i++) {
+    var key = keysArray[i]; // here is "name" of object property
+    // var value = obj[key]; // here get value "by name" as it expected with objects
+    console.log(key);
+    }
+   console.log(data);
 })
 .catch(function (err) {
   console.error(err);
 });
-
  res.send('Hello world, I am a chat bot')
 })
 
@@ -81,28 +68,23 @@ app.get('/webhook/', function (req, res) {
 })
 
 
-
-
-
 // WebHook Response
 app.post('/webhook/', function (req, res) {
     messaging_events = req.body.entry[0].messaging
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
-        senderName = ""
-        
+
         if (event.message && event.message.text) {
             text = event.message.text.toLowerCase()
             if (text === 'hi' || text === 'hello') {
-                //sendGenericMessage(sender)
                 getUserName(sender,function(result){
                     sendTextMessage(sender, "Hi, "+ result)
                 })
-                
+                sendTextMessage(sender,introductionText)
                 continue
             }
-            else if(text.length ==5){
+            else if(text.length ==5 && !isNaN(text)){
                 getWeather(text,function(result){
                     sendTextMessage(sender, "Weather: \n" + result)
                })
@@ -180,7 +162,6 @@ function sendTextMessage(sender, text) {
 
 
 // Send an test message back as two cards.
-
 function sendGenericMessage(sender) {
     messageData = {
         "attachment": {
