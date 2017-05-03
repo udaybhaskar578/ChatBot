@@ -80,8 +80,10 @@ app.post('/webhook/', function (req, res) {
             if (text === 'hi' || text === 'hello') {
                 getUserName(sender,function(result){
                     sendTextMessage(sender, "Hi, "+ result)
+                }).then(function(){
+                    sendTextMessage(sender,introductionText) 
                 })
-                sendTextMessage(sender,introductionText)
+                
                 continue
             }
             else if(text.length ==5 && !isNaN(text)){
