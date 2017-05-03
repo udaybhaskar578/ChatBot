@@ -3,13 +3,14 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var app = express();
 
+// Facebook Page Token
+var token = "EAAa3gAjGZCyUBAB9gk0sZB2Rm6Y6m2qO8c2YI1XsZB1JKEyQxgqZA0f73C3cMZAz1eIgmn0bLqMVoEGVsMATHgLSZCWfuP6CAsZC90u8sMnWeMRA545V7q92brd8dyNa4a4wETczPllmLugfEOpuij5ChgI9bCDnGKVT1iYqOf9TQZDZD"
 
-
-var server = app.listen(3000, function() {
-  console.log('Listening on port %d', server.address().port);
-});
-
-app.set('port', (process.env.PORT || 5000))
+// Code to set the port number and listen to the port number
+app.set('port', (process.env.PORT || 3000))
+app.listen(app.get('port'), function() {
+   console.log('Listening on port %d', app.get('port'))
+})
 
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}))
@@ -21,33 +22,31 @@ app.use(bodyParser.json())
 app.get('/', function (req, res) {
 
     getWeather("95112",function(result){
-        console.log(result+"Bombay")
-        res.send(result)
-    })
-    
+        console.log(result)
         
-    
+    })
+    getUserName(function(result){
+        console.log(result)
+        res.send(result)
+        
+    })  
 })
 
 
 app.get('/helloworld/', function (req, res) {
-
     res.send('Hello world, I am a chat bot')
 })
 
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === 'Aha_Moment_Labs') {
+    if (req.query['hub.verify_token'] === 'SaiUdayBhaskarMudivarty') {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
 })
 
-// Spin up the server
-app.listen(app.get('port'), function() {
-    console.log('running on port', app.get('port'))
-})
+
 
 
 
@@ -57,18 +56,17 @@ app.post('/webhook/', function (req, res) {
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
-        senderName = event.sender.name
-        var responseMessage = ""
+        senderName = ""
         
         if (event.message && event.message.text) {
-            text = event.message.text
-            if (text === 'hi') {
+            text = event.message.text.toLowerCase()
+            if (text === 'hi' || text === 'hello') {
                 //sendGenericMessage(sender)
-                sendTextMessage(sender,String(senderName))
+                getUserName(sender,function(result){
+                    sendTextMessage(sender,)
+                })
+                
                 continue
-            }
-            else if(text.includes("hi")){
-                sendTextMessage(sender,"")
             }
             else if(text.length ==5){
                 getWeather(text,function(result){
@@ -90,22 +88,6 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 })
 
-var token = "EAAa3gAjGZCyUBAB9gk0sZB2Rm6Y6m2qO8c2YI1XsZB1JKEyQxgqZA0f73C3cMZAz1eIgmn0bLqMVoEGVsMATHgLSZCWfuP6CAsZC90u8sMnWeMRA545V7q92brd8dyNa4a4wETczPllmLugfEOpuij5ChgI9bCDnGKVT1iYqOf9TQZDZD"
-
-// Sample Looked at
-// function add(post, callback) {
-//   var word = new KeyWord({keyword: post.keyword});    
-//   word.save(function(err, word) {
-//     if (err) {
-//       if (err.code==11000) callback(post.keyword + ' is already added.');
-//       else callback('Added : ' + post.keyword);
-//     }
-//   });
-// }
-
-// add(post, function(result) {
-//   // return value is here
-// });
 
 // Function to compute the weather at given zip code
 function getWeather(zipcode,callback){
@@ -116,13 +98,27 @@ function getWeather(zipcode,callback){
         json: true
         }, function (error, response, body) {
         if (!error && response.statusCode === 200) {
-            // console.log("Location: "+body.location.name+"\nTemperature: "+body.current.temp_f)
-            callback("Location: "+body.location.name+"\nTemperature: "+body.current.temp_f);// Print the json response) 
+            callback("Location: "+body.location.name+"\nTemperature: "+body.current.temp_f); 
         }else{
             callback("error")
         }
     })
 }
+
+function getUserName(eventSenderId,callback){
+    var url = 'https://graph.facebook.com/v2.6/'+eventSenderId+'?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token='+token
+    request({
+        url: url,
+        json: true
+        }, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            callback(body.first_name+" "+body.last_name);
+        }else{
+            callback("error")
+        }
+    })
+}
+
 
 
 function sendTextMessage(sender, text) {
@@ -237,3 +233,7 @@ function sendGenericMessage(sender) {
 //     alert("Bombay");
 //   }
 // });
+
+
+// For getting User Name Using Match API in messenger platform
+
