@@ -39,15 +39,16 @@ app.use(bodyParser.json())
 // Index route
 app.get('/', function (req, res) {
 
-yelp.search({ term: 'Temple', location: 'sanjose' ,sort:'2', limit:'2'})
+yelp.search({ term: 'Indian Restaurants', location: 'San Francisco' ,sort:'2', limit:'2'})
 .then(function (data) {
     var keysArray = Object.keys(data);
-    for (var i = 0; i < keysArray.length; i++) {
-    var key = keysArray[i]; // here is "name" of object property
-    // var value = obj[key]; // here get value "by name" as it expected with objects
-    console.log(key);
-    }
-   console.log(data);
+    var businesses = data[keysArray[2]]
+    // for (var i = 0; i < keysArray.length; i++) {
+    // var key = keysArray[i]; // here is "name" of object property
+    // // var value = obj[key]; // here get value "by name" as it expected with objects
+    // console.log(key);
+    // }
+    console.log(businesses[0].rating);
 })
 .catch(function (err) {
   console.error(err);
