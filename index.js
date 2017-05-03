@@ -12,6 +12,11 @@ var yelp = new Yelp({
   token_secret: 'CusdwqDsHGrMJtLmtDxmm84c14g',
 });
 
+var introductionText = `I am chat bot in development phase, \n I can help you 
+out in the following ways\n1.Send me your zipcode, I'll tell weather at
+ your place\n2.Know restaurants nearby`
+
+
 
 
 
@@ -36,30 +41,27 @@ app.use(bodyParser.json())
 // Index route
 app.get('/', function (req, res) {
 
-
+    var urls='https://graph.facebook.com/v2.6/1362584033807727?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=EAAa3gAjGZCyUBAB9gk0sZB2Rm6Y6m2qO8c2YI1XsZB1JKEyQxgqZA0f73C3cMZAz1eIgmn0bLqMVoEGVsMATHgLSZCWfuP6CAsZC90u8sMnWeMRA545V7q92brd8dyNa4a4wETczPllmLugfEOpuij5ChgI9bCDnGKVT1iYqOf9TQZDZD'
+    // var url = 'https://graph.facebook.com/v2.6/'+eventSenderId+'?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token='+token;
+    request({
+        url: urls,
+        json: true
+        }, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            console.log(body[0]+" "+body.last_name)
+        }else{
+            console.log("error")
+        }
+    })
 // See http://www.yelp.com/developers/documentation/v2/search_api
-yelp.search({ term: 'Indian Restaurants', location: '95112' })
+yelp.search({ term: 'Shopping Malls', location: '95112' ,sort:'2', limit:'2'})
 .then(function (data) {
+
   console.log(data);
 })
 .catch(function (err) {
   console.error(err);
 });
-
-// See http://www.yelp.com/developers/documentation/v2/business
-// yelp.business('yelp-san-francisco')
-//   .then(console.log)
-//   .catch(console.error);
-
-// yelp.phoneSearch({ phone: '+15555555555' })
-//   .then(console.log)
-//   .catch(console.error);
-
-// // A callback based API is also available:
-// yelp.business('yelp-san-francisco', function(err, data) {
-//   if (err) return console.log(error);
-//   console.log(data);
-// });
 
  res.send('Hello world, I am a chat bot')
 })
@@ -138,6 +140,7 @@ function getWeather(zipcode,callback){
 }
 
 function getUserName(eventSenderId,callback){
+    var urls='https://graph.facebook.com/v2.6/1362584033807727?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=EAAa3gAjGZCyUBAB9gk0sZB2Rm6Y6m2qO8c2YI1XsZB1JKEyQxgqZA0f73C3cMZAz1eIgmn0bLqMVoEGVsMATHgLSZCWfuP6CAsZC90u8sMnWeMRA545V7q92brd8dyNa4a4wETczPllmLugfEOpuij5ChgI9bCDnGKVT1iYqOf9TQZDZD'
     var url = 'https://graph.facebook.com/v2.6/'+eventSenderId+'?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token='+token;
     request({
         url: url,
@@ -255,18 +258,4 @@ function sendGenericMessage(sender) {
         }
     })
 }
-
-
-//   $.ajax({
-//   type: 'GET',
-//   url: 'https://api.apixu.com/v1/current.json?key=7f8bda56cf5749b4afd10635170104&q=95112',
-//   async: false,
-//   dataType: 'json',
-//   success: function (data) {
-//     alert("Bombay");
-//   }
-// });
-
-
-// For getting User Name Using Match API in messenger platform
 
