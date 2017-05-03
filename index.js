@@ -260,3 +260,35 @@ function sendGenericMessage(sender) {
 //                         "title": "Call Restaurant"
 //                     }],
 //                 }
+
+// Yelp Object Response
+// { is_claimed: true,
+//     rating: 4.5,
+//     mobile_url: 'https://m.yelp.com/biz/curry-leaf-san-francisco?adjust_creative=M33oLit1ilchda_3Eat1dw&utm_campaign=yelp_api&utm_medium=api_v2_search&utm_source=M33oLit1ilchda_3Eat1dw',
+//     rating_img_url: 'https://s3-media2.fl.yelpcdn.com/assets/2/www/img/99493c12711e/ico/stars/v1/stars_4_half.png',
+//     review_count: 370,
+//     name: 'Curry Leaf',
+//     rating_img_url_small: 'https://s3-media2.fl.yelpcdn.com/assets/2/www/img/a5221e66bc70/ico/stars/v1/stars_small_4_half.png',
+//     url: 'https://www.yelp.com/biz/curry-leaf-san-francisco?adjust_creative=M33oLit1ilchda_3Eat1dw&utm_campaign=yelp_api&utm_medium=api_v2_search&utm_source=M33oLit1ilchda_3Eat1dw',
+//     categories: [ [Object], [Object], [Object] ],
+//     menu_date_updated: 1493358366,
+//     phone: '4154404293',
+//     snippet_text: 'LOVE this place. Friendly, fast service and flavorful food. The lamb biryani was one of the best I\'ve ever had, and definitely the best I\'ve had in the...',
+//     image_url: 'https://s3-media4.fl.yelpcdn.com/bphoto/F74K-bnfRGvRDBCmilffew/ms.jpg',
+//     snippet_image_url: 'https://s3-media1.fl.yelpcdn.com/photo/KVOmCb0xW2ZktVuB52WEyg/ms.jpg',
+//     display_phone: '+1-415-440-4293',
+//     rating_img_url_large: 'https://s3-media4.fl.yelpcdn.com/assets/2/www/img/9f83790ff7f6/ico/stars/v1/stars_large_4_half.png',
+//     menu_provider: 'eat24',
+//     id: 'curry-leaf-san-francisco',
+//     is_closed: false,
+//     location:
+//      { cross_streets: 'Chestnut St & Taylor St',
+//        city: 'San Francisco',
+//        display_address: [Object],
+//        geo_accuracy: 8,
+//        neighborhoods: [Object],
+//        postal_code: '94133',
+//        country_code: 'US',
+//        address: [Object],
+//        coordinate: [Object],
+//        state_code: 'CA' } }
