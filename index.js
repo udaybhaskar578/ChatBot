@@ -2,7 +2,10 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 var Yelp = require('yelp');
+const Student = require('./Data/FBTemplateData/student.js');
+var YelpService = require('./Services/yelpservice.js');
 var app = express();
+
 
 //Yelp Initialization 
 var yelp = new Yelp({
@@ -27,6 +30,10 @@ app.set('port', (process.env.PORT || 3000))
 app.listen(app.get('port'), function() {
    console.log('Listening on port %d', app.get('port'))
    console.log(isNaN('95112'))
+    var student = new Student('Tolani', 23, 'ddr1234');
+    console.log('The student name is ' + student.getStudentName());
+    
+
 
 })
 
@@ -48,7 +55,7 @@ yelp.search({ term: 'Indian Restaurants', location: 'San Francisco' ,sort:'2', l
     // // var value = obj[key]; // here get value "by name" as it expected with objects
     // console.log(key);
     // }
-    console.log(businesses[0]);
+    YelpService.convertYelpDataToFBTemplate(businesses);
 })
 .catch(function (err) {
   console.error(err);
@@ -85,6 +92,9 @@ app.post('/webhook/', function (req, res) {
                     sendTextMessage(sender, "Hi, "+ result)
                     sendTextMessage(sender,introductionText) 
                 })
+                continue
+            }else if (text === 'yelp' ) {
+                sendGenericMessage();
                 continue
             }
             else if(text.length ==5 && !isNaN(text)){
@@ -166,66 +176,111 @@ function sendTextMessage(sender, text) {
 
 // Send an test message back as two cards.
 function sendGenericMessage(sender) {
-    messageData = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "generic",
-                "elements": [{
-                    "title": "Meditation",
-                    "subtitle": "Gives happiness",
-                    "image_url": "http://www.oplexcareers.com/wp-content/uploads/2016/06/Meditation.jpg",
-                    "buttons": [{
-                        "type": "web_url",
-                        "url": "https://www.facebook.com/groups/aichatbots/",
-                        "title": "Programming Material"
-                    }, {
-                        "type": "web_url",
-                        "url": "https://www.reddit.com/r/Chat_Bots/",
-                        "title": "Chatbots on Reddit"
+    // messageData = {
+    //     "attachment": {
+    //         "type": "template",
+    //         "payload": {
+    //             "template_type": "generic",
+    //             "elements": [{
+    //                 "title": "Meditation",
+    //                 "subtitle": "Gives happiness",
+    //                 "image_url": "http://www.oplexcareers.com/wp-content/uploads/2016/06/Meditation.jpg",
+    //                 "buttons": [{
+    //                     "type": "web_url",
+    //                     "url": "https://www.facebook.com/groups/aichatbots/",
+    //                     "title": "Programming Material"
+    //                 }, {
+    //                     "type": "web_url",
+    //                     "url": "https://www.reddit.com/r/Chat_Bots/",
+    //                     "title": "Chatbots on Reddit"
+    //                 },{
+    //                     "type": "web_url",
+    //                     "url": "https://twitter.com/aichatbots",
+    //                     "title": "Chatbots on Twitter"
+    //                 }],
+    //             }, {
+    //                 "title": "Chatbots FAQ",
+    //                 "subtitle": "Asking the Deep Questions",
+    //                 "image_url": "https://tctechcrunch2011.files.wordpress.com/2016/04/facebook-chatbots.png?w=738",
+    //                 "buttons": [{
+    //                     "type": "postback",
+    //                     "title": "What's the benefit?",
+    //                     "payload": "Chatbots make content interactive instead of static",
+    //                 },{
+    //                     "type": "postback",
+    //                     "title": "What can Chatbots do",
+    //                     "payload": "One day Chatbots will control the Internet of Things! You will be able to control your homes temperature with a text",
+    //                 }, {
+    //                     "type": "postback",
+    //                     "title": "The Future",
+    //                     "payload": "Chatbots are fun! One day your BFF might be a Chatbot",
+    //                 }],
+    //             },  {
+    //                 "title": "Learning More",
+    //                 "subtitle": "Aking the Deep Questions",
+    //                 "image_url": "http://www.brandknewmag.com/wp-content/uploads/2015/12/cortana.jpg",
+    //                 "buttons": [{
+    //                     "type": "postback",
+    //                     "title": "AIML",
+    //                     "payload": "Checkout Artificial Intelligence Mark Up Language. Its easier than you think!",
+    //                 },{
+    //                     "type": "postback",
+    //                     "title": "Machine Learning",
+    //                     "payload": "Use python to teach your maching in 16D space in 15min",
+    //                 }, {
+    //                     "type": "postback",
+    //                     "title": "Communities",
+    //                     "payload": "Online communities & Meetups are the best way to stay ahead of the curve!",
+    //                 }],
+    //             }]  
+    //         } 
+    //     }
+    // }
+
+    var messageData = {
+        "attachment":{
+            "type":"template",
+            "payload":{
+                "template_type":"generic",
+                "elements":[{
+                    "title":"Avatar's Restaurant",
+                    "subtitle":"4.5/5",
+                    "image_url":"https://s3-media3.fl.yelpcdn.com/bphoto/gbWsbvTI3T-jJUMh7Vhs5g/ms.jpg",
+                    "buttons":[{
+                        "type":"web_url",
+                        "url":"https://www.yelp.com/biz/avatars-restaurant-sausalito?adjust_creative=M33oLit1ilchda_3Eat1dw&utm_campaign=yelp_api&utm_medium=api_v2_search&utm_source=M33oLit1ilchda_3Eat1dw",
+                        "payload":null,
+                        "title":"View on Yelp!!!"
+                    },
+                    {
+                        "type":"phone_number",
+                        "url":null,
+                        "payload":"4153328083",
+                        "title":"Call"
+                    }
+                    ]
+                },
+                {
+                    "title":"Curry Leaf",
+                    "subtitle":"4.5/5",
+                    "image_url":"https://s3-media4.fl.yelpcdn.com/bphoto/F74K-bnfRGvRDBCmilffew/ms.jpg",
+                    "buttons":[{
+                        "type":"web_url",
+                        "url":"https://www.yelp.com/biz/curry-leaf-san-francisco?adjust_creative=M33oLit1ilchda_3Eat1dw&utm_campaign=yelp_api&utm_medium=api_v2_search&utm_source=M33oLit1ilchda_3Eat1dw",
+                        "payload":null,
+                        "title":"View on Yelp!!!"
                     },{
-                        "type": "web_url",
-                        "url": "https://twitter.com/aichatbots",
-                        "title": "Chatbots on Twitter"
-                    }],
-                }, {
-                    "title": "Chatbots FAQ",
-                    "subtitle": "Asking the Deep Questions",
-                    "image_url": "https://tctechcrunch2011.files.wordpress.com/2016/04/facebook-chatbots.png?w=738",
-                    "buttons": [{
-                        "type": "postback",
-                        "title": "What's the benefit?",
-                        "payload": "Chatbots make content interactive instead of static",
-                    },{
-                        "type": "postback",
-                        "title": "What can Chatbots do",
-                        "payload": "One day Chatbots will control the Internet of Things! You will be able to control your homes temperature with a text",
-                    }, {
-                        "type": "postback",
-                        "title": "The Future",
-                        "payload": "Chatbots are fun! One day your BFF might be a Chatbot",
-                    }],
-                },  {
-                    "title": "Learning More",
-                    "subtitle": "Aking the Deep Questions",
-                    "image_url": "http://www.brandknewmag.com/wp-content/uploads/2015/12/cortana.jpg",
-                    "buttons": [{
-                        "type": "postback",
-                        "title": "AIML",
-                        "payload": "Checkout Artificial Intelligence Mark Up Language. Its easier than you think!",
-                    },{
-                        "type": "postback",
-                        "title": "Machine Learning",
-                        "payload": "Use python to teach your maching in 16D space in 15min",
-                    }, {
-                        "type": "postback",
-                        "title": "Communities",
-                        "payload": "Online communities & Meetups are the best way to stay ahead of the curve!",
-                    }],
-                }]  
-            } 
+                        "type":"phone_number",
+                        "url":null,
+                        "payload":"4154404293",
+                        "title":"Call"
+                    }
+                    ]
+                }
+                ]
+            }
         }
-    }
+    };
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token:token},
