@@ -46,20 +46,7 @@ app.use(bodyParser.json())
 // Index route
 app.get('/', function (req, res) {
 
-yelp.search({ term: 'Indian Restaurants', location: 'San Francisco' ,sort:'2', limit:'2'})
-.then(function (data) {
-    var keysArray = Object.keys(data);
-    var businesses = data[keysArray[2]]
-    // for (var i = 0; i < keysArray.length; i++) {
-    // var key = keysArray[i]; // here is "name" of object property
-    // // var value = obj[key]; // here get value "by name" as it expected with objects
-    // console.log(key);
-    // }
-    YelpService.convertYelpDataToFBTemplate(businesses);
-})
-.catch(function (err) {
-  console.error(err);
-});
+
  res.send('Hello world, I am a chat bot')
 })
 
@@ -96,6 +83,12 @@ app.post('/webhook/', function (req, res) {
             }else if (text === 'yelp' ) {
                 sendGenericMessage(sender);
                 continue
+            }else if(text.includes(" in ")){
+                var res = text.split("in");
+                getYelpResults(res[0],res[1],function(response){
+                    sendTemplatedMessage(sender,result);
+                });
+
             }
             else if(text.length ==5 && !isNaN(text)){
                 getWeather(text,function(result){
@@ -117,6 +110,20 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 })
 
+
+function getYelpResults(term,location,sortby=2,limit=5,callback){
+    yelp.search({ term: term, location: location ,sort:sortby, limit:limit})
+    .then(function (data) {
+        var keysArray = Object.keys(data);
+        var businesses = data[keysArray[2]]
+        YelpService.convertYelpDataToFBTemplate(businesses,function(result){
+            callback(result);
+        });
+    })
+    .catch(function (err) {
+    console.error(err);
+    });
+}
 
 // Function to compute the weather at given zip code
 function getWeather(zipcode,callback){
@@ -150,14 +157,30 @@ function getUserName(eventSenderId,callback){
 }
 
 
-
 function sendTextMessage(sender, text) {
     messageData = {
         text:text
     }
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
-        sender_action:"typing_on",
+        qs: {access_token:token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
+
+function sendTemplatedMessage(sender, messageData) {
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token:token},
         method: 'POST',
         json: {
@@ -176,67 +199,6 @@ function sendTextMessage(sender, text) {
 
 // Send an test message back as two cards.
 function sendGenericMessage(sender) {
-    // messageData = {
-    //     "attachment": {
-    //         "type": "template",
-    //         "payload": {
-    //             "template_type": "generic",
-    //             "elements": [{
-    //                 "title": "Meditation",
-    //                 "subtitle": "Gives happiness",
-    //                 "image_url": "http://www.oplexcareers.com/wp-content/uploads/2016/06/Meditation.jpg",
-    //                 "buttons": [{
-    //                     "type": "web_url",
-    //                     "url": "https://www.facebook.com/groups/aichatbots/",
-    //                     "title": "Programming Material"
-    //                 }, {
-    //                     "type": "web_url",
-    //                     "url": "https://www.reddit.com/r/Chat_Bots/",
-    //                     "title": "Chatbots on Reddit"
-    //                 },{
-    //                     "type": "web_url",
-    //                     "url": "https://twitter.com/aichatbots",
-    //                     "title": "Chatbots on Twitter"
-    //                 }],
-    //             }, {
-    //                 "title": "Chatbots FAQ",
-    //                 "subtitle": "Asking the Deep Questions",
-    //                 "image_url": "https://tctechcrunch2011.files.wordpress.com/2016/04/facebook-chatbots.png?w=738",
-    //                 "buttons": [{
-    //                     "type": "postback",
-    //                     "title": "What's the benefit?",
-    //                     "payload": "Chatbots make content interactive instead of static",
-    //                 },{
-    //                     "type": "postback",
-    //                     "title": "What can Chatbots do",
-    //                     "payload": "One day Chatbots will control the Internet of Things! You will be able to control your homes temperature with a text",
-    //                 }, {
-    //                     "type": "postback",
-    //                     "title": "The Future",
-    //                     "payload": "Chatbots are fun! One day your BFF might be a Chatbot",
-    //                 }],
-    //             },  {
-    //                 "title": "Learning More",
-    //                 "subtitle": "Aking the Deep Questions",
-    //                 "image_url": "http://www.brandknewmag.com/wp-content/uploads/2015/12/cortana.jpg",
-    //                 "buttons": [{
-    //                     "type": "postback",
-    //                     "title": "AIML",
-    //                     "payload": "Checkout Artificial Intelligence Mark Up Language. Its easier than you think!",
-    //                 },{
-    //                     "type": "postback",
-    //                     "title": "Machine Learning",
-    //                     "payload": "Use python to teach your maching in 16D space in 15min",
-    //                 }, {
-    //                     "type": "postback",
-    //                     "title": "Communities",
-    //                     "payload": "Online communities & Meetups are the best way to stay ahead of the curve!",
-    //                 }],
-    //             }]  
-    //         } 
-    //     }
-    // }
-
     var messageData = {
         "attachment":{
             "type":"template",

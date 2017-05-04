@@ -7,7 +7,7 @@ module.exports.getYelpService = function(){
     console.log("In the Yelp Service Model");
 }
 
-module.exports.convertYelpDataToFBTemplate = function(data){
+module.exports.convertYelpDataToFBTemplate = function(data,callback){
 //First Populate Elements and Then Add buttons
 var payload;
 populateElements(data,function(result){
@@ -20,7 +20,7 @@ var attachment = {
         payload
     }
 }
-console.log(JSON.stringify(attachment));
+callback(JSON.stringify(attachment));
 }
 
 function populateElements(data,callback){
