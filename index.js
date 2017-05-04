@@ -94,7 +94,7 @@ app.post('/webhook/', function (req, res) {
                 })
                 continue
             }else if (text === 'yelp' ) {
-                sendGenericMessage();
+                sendGenericMessage(sender);
                 continue
             }
             else if(text.length ==5 && !isNaN(text)){
